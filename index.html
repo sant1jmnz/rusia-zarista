@@ -7125,5 +7125,75 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
 </div>
 </div>
 
+
+<style>
+  #fullscreen-toggle-btn {
+    position: fixed;
+    top: 14px;
+    right: 14px;
+    z-index: 2147483647;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.55);
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.15s ease, transform 0.15s ease;
+  }
+  #fullscreen-toggle-btn:hover {
+    background: rgba(0, 0, 0, 0.8);
+    transform: scale(1.05);
+  }
+  #fullscreen-toggle-btn svg {
+    width: 20px;
+    height: 20px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+</style>
+<button id="fullscreen-toggle-btn" type="button" aria-label="Pantalla completa" title="Pantalla completa">
+  <svg id="fullscreen-toggle-icon" viewBox="0 0 24 24">
+    <path d="M8 3H5a2 2 0 0 0-2 2v3"></path>
+    <path d="M16 3h3a2 2 0 0 1 2 2v3"></path>
+    <path d="M8 21H5a2 2 0 0 1-2-2v-3"></path>
+    <path d="M16 21h3a2 2 0 0 0 2-2v-3"></path>
+  </svg>
+</button>
+<script>
+(function () {
+  var btn = document.getElementById('fullscreen-toggle-btn');
+  var icon = document.getElementById('fullscreen-toggle-icon');
+  var expandPath = '<path d="M8 3H5a2 2 0 0 0-2 2v3"></path><path d="M16 3h3a2 2 0 0 1 2 2v3"></path><path d="M8 21H5a2 2 0 0 1-2-2v-3"></path><path d="M16 21h3a2 2 0 0 0 2-2v-3"></path>';
+  var collapsePath = '<path d="M9 3v4a2 2 0 0 1-2 2H3"></path><path d="M15 3v4a2 2 0 0 0 2 2h4"></path><path d="M9 21v-4a2 2 0 0 0-2-2H3"></path><path d="M15 21v-4a2 2 0 0 1 2-2h4"></path>';
+
+  function target() {
+    return document.querySelector('.reveal-viewport') || document.documentElement;
+  }
+
+  function updateIcon() {
+    icon.innerHTML = document.fullscreenElement ? collapsePath : expandPath;
+  }
+
+  function toggleFullscreen() {
+    if (!document.fullscreenElement) {
+      var el = target();
+      (el.requestFullscreen || el.webkitRequestFullscreen || el.msRequestFullscreen).call(el);
+    } else {
+      (document.exitFullscreen || document.webkitExitFullscreen || document.msExitFullscreen).call(document);
+    }
+  }
+
+  btn.addEventListener('click', toggleFullscreen);
+  document.addEventListener('fullscreenchange', updateIcon);
+  document.addEventListener('webkitfullscreenchange', updateIcon);
+})();
+</script>
 </body>
 </html>
